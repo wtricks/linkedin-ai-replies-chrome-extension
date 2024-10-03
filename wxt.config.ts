@@ -6,7 +6,6 @@ export default defineConfig({
   manifest: {
     name: 'LinkedIn AI Reply',
     description: 'Enhance your LinkedIn messaging experience with AI-powered replies.',
-    version: '0.0.1',
-    type: 'popup',
+    version: '0.0.1'
   }
 });
