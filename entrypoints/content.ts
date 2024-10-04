@@ -36,7 +36,10 @@ export default defineContentScript({
       });
 
       messageInput.addEventListener('blur', () => {
-        aiButton.style.display = 'none';
+        // Wait for the user interaction
+        setTimeout(() => {
+          aiButton.style.display = 'none'; 
+        }, 200);
       });
     };
 
