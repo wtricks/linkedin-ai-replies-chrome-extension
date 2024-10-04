@@ -63,14 +63,17 @@ export default defineContentScript({
         // check if aleady added response
         const aiResponseItem = modalContent.querySelector('.ai-reply') as HTMLElement;
         if (aiResponseItem) {
-          aiResponseItem.remove();
-
-          const modalList = modalContent.querySelector('.li-ai-modal-list') as HTMLUListElement;
-          setTimeout(() => appendAIResponse(modalList, generateButton), 1000); // mimic AI response
           return
         }
 
         handleGenerate(modalContent, generateButton);
+      });
+
+      // close modal when clicking outside of it
+      modalWrapper.addEventListener('click', (event) => {
+        if (event.target === modalWrapper) {
+          closeModal();
+        }
       });
     };
 
@@ -123,7 +126,7 @@ export default defineContentScript({
     const appendAIResponse = (modalList: HTMLUListElement, generateButton: HTMLButtonElement) => {
       const aiResponseItem = document.createElement('li');
       aiResponseItem.classList.add('li-ai-modal-item', 'ai-reply');
-      aiResponseItem.textContent = 'Thank you for the opportunity! If you have any more questions, feel free to ask.';
+      aiResponseItem.textContent = 'Thank you for the opportunity! If you have any more questions or if there\'s anything else I can help you with, feel free to ask.';
       modalList.appendChild(aiResponseItem);
 
       updateGenerateButton(generateButton);
@@ -147,7 +150,7 @@ export default defineContentScript({
     const insertAiResponse = () => {
       if (activeInput) {
         activeInput.focus();
-        activeInput.innerHTML = `<p>Thank you for the opportunity! If you have more questions, feel free to ask.</p>`;
+        activeInput.innerHTML = `<p>Thank you for the opportunity! If you have any more questions or if there's anything else I can help you with, feel free to ask.</p>`;
         activeInput.parentElement!.querySelector('.msg-form__placeholder')?.classList.remove('msg-form__placeholder');
         activeInput = null;
 
