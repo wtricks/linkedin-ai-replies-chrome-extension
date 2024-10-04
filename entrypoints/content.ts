@@ -11,6 +11,11 @@ export default defineContentScript({
     const getMessageInput = (): HTMLDivElement | null =>
       document.querySelector<HTMLDivElement>('.msg-form__contenteditable');
 
+    /**
+     * Check if the message input element exists
+     * If it does, inject the AI button
+     * If it doesn't, keep checking
+     */
     const checkForMessageInput = () => {
       const messageContainer = getMessageInput();
 
@@ -21,6 +26,10 @@ export default defineContentScript({
       }
     };
 
+    /**
+     * Inject the AI button
+     * @param container The container element
+     */
     const injectAiButton = (container: HTMLElement) => {
       const aiButton = createButtonElement(PenSvg, 'AI Button');
       aiButton.classList.add('li-ai-button');
@@ -28,6 +37,12 @@ export default defineContentScript({
       container.appendChild(aiButton);
     };
 
+    /**
+     * Create a button element
+     * @param iconSrc icon source path
+     * @param altText alt text
+     * @returns 
+     */
     const createButtonElement = (iconSrc: string, altText: string) => {
       const button = document.createElement('button');
       button.innerHTML = `<img src="${iconSrc}" alt="${altText}" role="button" />`;
@@ -35,6 +50,9 @@ export default defineContentScript({
       return button;
     };
 
+    /**
+     * Open the AI modal
+     */
     const openAIModal = () => {
       const modalWrapper = document.createElement('div');
       modalWrapper.classList.add('li-ai-modal-wrapper');
@@ -65,6 +83,12 @@ export default defineContentScript({
       generateButton.addEventListener('click', () => handleGenerate(modal, generateButton));
     };
 
+    /**
+     * Handle the generate button click
+     * @param modal The modal element
+     * @param generateButton The generate button element
+     * @returns 
+     */
     const handleGenerate = (modal: HTMLDivElement, generateButton: HTMLButtonElement) => {
       const inputElement = modal.querySelector('.li-ai-input') as HTMLInputElement;
       const modalList = modal.querySelector('.li-ai-modal-list') as HTMLUListElement;
@@ -77,7 +101,7 @@ export default defineContentScript({
       userItem.textContent = inputElement.value;
       modalList.appendChild(userItem);
 
-      // Add AI response to the list after some delay (simulate async response)
+      // Add AI response to the list after some delay (mimic API call)
       setTimeout(() => {
         const aiResponseItem = document.createElement('li');
         aiResponseItem.classList.add('li-ai-modal-item', 'ai-reply');
@@ -90,6 +114,11 @@ export default defineContentScript({
       }, 1000);
     }
 
+    /**
+     * Show insert button
+     * @param modal The modal element
+     * @param generateButton The generate button element
+     */
     const showInsertButton = (modal: HTMLDivElement, generateButton: HTMLButtonElement) => {
       const insertBtn = createButtonElement(ArrowDownSvg, 'Insert Button');
       insertBtn.innerHTML = `<img src="${ArrowDownSvg}" /> <span>Insert</span>`;
@@ -98,6 +127,9 @@ export default defineContentScript({
       generateButton.parentElement?.insertBefore(insertBtn, generateButton);
     };
 
+    /**
+     * Insert AI response
+     */
     const insertAiResponse = () => {
       const messageInput = getMessageInput();
       if (messageInput) {
@@ -107,10 +139,15 @@ export default defineContentScript({
       }
     };
 
+    /**
+     * Close the modal
+     * @param modalWrapper The modal wrapper element
+     */
     const closeModal = (modalWrapper: HTMLElement) => {
       modalWrapper.remove();
     };
 
+    // Check if the message input element exists
     checkForMessageInput();
   },
 });
