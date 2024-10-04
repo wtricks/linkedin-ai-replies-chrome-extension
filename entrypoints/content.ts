@@ -8,6 +8,8 @@ import './content-style.css';
 export default defineContentScript({
   matches: ['<all_urls>'],
   main() {
+    let aiButton: HTMLButtonElement | null = null;
+    
     const getMessageInput = (): HTMLDivElement | null =>
       document.querySelector<HTMLDivElement>('.msg-form__contenteditable');
 
@@ -17,13 +19,13 @@ export default defineContentScript({
      * If it doesn't, keep checking
      */
     const checkForMessageInput = () => {
+      if (aiButton && aiButton.parentElement) return;
+
       const messageContainer = getMessageInput();
 
       if (messageContainer) {
-        injectAiButton(messageContainer.parentElement!);
+        injectAiButton(messageContainer.parentElement as HTMLElement);
         setupFocusEventListeners(messageContainer);
-      } else {
-        setTimeout(checkForMessageInput, 1000); // Keep checking every 1 second
       }
     };
 
@@ -39,7 +41,7 @@ export default defineContentScript({
         // Wait for the user interaction
         setTimeout(() => {
           aiButton.style.display = 'none'; 
-        }, 200);
+        }, 500);
       });
     };
 
@@ -48,7 +50,7 @@ export default defineContentScript({
      * @param container The container element
      */
     const injectAiButton = (container: HTMLElement) => {
-      const aiButton = createButtonElement(PenSvg, 'AI Button');
+      aiButton = createButtonElement(PenSvg, 'AI Button');
       aiButton.classList.add('li-ai-button');
       aiButton.style.display = 'none';
 
@@ -73,6 +75,7 @@ export default defineContentScript({
      * Open the AI modal
      */
     const openAIModal = () => {
+      console.log('Open AI modal!');
       const modalWrapper = document.createElement('div');
       modalWrapper.classList.add('li-ai-modal-wrapper');
 
@@ -168,7 +171,11 @@ export default defineContentScript({
       modalWrapper.remove();
     };
 
-    // Check if the message input element exists
-    checkForMessageInput();
+    // we need a better way to inject the button
+    // we can use 'MutationObserver' to check if the message input element exists
+    // but for now I'm just checking ai-button parent element, if it is not exists, we can inject the button
+    setInterval(() => {
+      checkForMessageInput();
+    }, 1000);
   },
 });
