@@ -59,7 +59,19 @@ export default defineContentScript({
       showModal(modalWrapper, modalContent);
 
       const generateButton = modalContent.querySelector('.generate-btn') as HTMLButtonElement;
-      generateButton.addEventListener('click', () => handleGenerate(modalContent, generateButton));
+      generateButton.addEventListener('click', () => {
+        // check if aleady added response
+        const aiResponseItem = modalContent.querySelector('.ai-reply') as HTMLElement;
+        if (aiResponseItem) {
+          aiResponseItem.remove();
+
+          const modalList = modalContent.querySelector('.li-ai-modal-list') as HTMLUListElement;
+          setTimeout(() => appendAIResponse(modalList, generateButton), 1000); // mimic AI response
+          return
+        }
+
+        handleGenerate(modalContent, generateButton);
+      });
     };
 
     const createModalWrapper = (): HTMLDivElement => {
@@ -96,7 +108,8 @@ export default defineContentScript({
 
       if (inputElement.value.trim()) {
         appendMessageToModal(modalList, inputElement.value);
-        setTimeout(() => appendAIResponse(modalList, generateButton), 1000);
+        setTimeout(() => appendAIResponse(modalList, generateButton), 1000); // mimic AI response
+        inputElement.value = ''; // reset input
       }
     };
 
@@ -122,10 +135,13 @@ export default defineContentScript({
     };
 
     const displayInsertButton = (parentElement: HTMLElement) => {
+      // check if insert button already exists
+      if (parentElement.querySelector('.insert-btn')) return;
+
       const insertButton = createButton(ArrowDownSvg, 'Insert', 'insert-btn li-ai-button');
       insertButton.innerHTML = `<img src="${ArrowDownSvg}" /> <span>Insert</span>`;
       insertButton.addEventListener('click', insertAiResponse);
-      parentElement.appendChild(insertButton);
+      parentElement.prepend(insertButton);
     };
 
     const insertAiResponse = () => {
