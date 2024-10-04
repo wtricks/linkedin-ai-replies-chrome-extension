@@ -21,9 +21,23 @@ export default defineContentScript({
 
       if (messageContainer) {
         injectAiButton(messageContainer.parentElement!);
+        setupFocusEventListeners(messageContainer);
       } else {
         setTimeout(checkForMessageInput, 1000); // Keep checking every 1 second
       }
+    };
+
+    // Show/Hide the AI button on focus/blur
+    const setupFocusEventListeners = (messageInput: HTMLDivElement) => {
+      const aiButton = document.querySelector('.li-ai-button') as HTMLElement;
+
+      messageInput.addEventListener('focus', () => {
+        aiButton.style.display = 'flex';
+      });
+
+      messageInput.addEventListener('blur', () => {
+        aiButton.style.display = 'none';
+      });
     };
 
     /**
@@ -33,6 +47,8 @@ export default defineContentScript({
     const injectAiButton = (container: HTMLElement) => {
       const aiButton = createButtonElement(PenSvg, 'AI Button');
       aiButton.classList.add('li-ai-button');
+      aiButton.style.display = 'none';
+
       aiButton.addEventListener('click', openAIModal);
       container.appendChild(aiButton);
     };
@@ -135,6 +151,8 @@ export default defineContentScript({
       if (messageInput) {
         messageInput.focus();
         messageInput.innerHTML = `<p>Thank you for the opportunity! If you have any more questions or if there's anything else I can help you with, feel free to ask.</p>`;
+        document.querySelector('.msg-form__placeholder')?.classList.remove('msg-form__placeholder'); // remove class top hide placeholder
+        
         closeModal(document.querySelector('.li-ai-modal-wrapper')!);
       }
     };
