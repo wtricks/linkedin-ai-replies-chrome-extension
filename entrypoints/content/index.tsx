@@ -3,7 +3,7 @@ import "~/assets/tailwind.css";
 import App from "./App";
 
 export default defineContentScript({
-    matches: ["*://*/*"],
+    matches: ["https://*.linkedin.com/*"],
     cssInjectionMode: "ui",
 
     main(ctx) {
