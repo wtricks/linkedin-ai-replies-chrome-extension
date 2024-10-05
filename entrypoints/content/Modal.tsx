@@ -1,18 +1,17 @@
 interface ModalProps {
     onInsert: (value: string) => void
+    onClose: () => void
     show: boolean
 }
 
-const Modal = ({ onInsert, show }: ModalProps) => {
-    const [showModal, setShowModal] = useState(false); // animation
-
+const Modal = ({ onInsert, onClose, show }: ModalProps) => {
     const [value, setValue] = useState('');
     const [chatList, setChatList] = useState<{ message: string, by: 'ai' | 'user' }[]>([]);
 
     const onInsertButtonClick = () => {
         onInsert(chatList[chatList.length - 1].message);
-        setShowModal(false);
         setChatList([]);
+        setValue('');
     }
 
     const onGenerateButtonClick = () => {
@@ -30,22 +29,21 @@ const Modal = ({ onInsert, show }: ModalProps) => {
         }
     }
 
-    useEffect(() => {
-        if (show) {
-            // animate modal
-            setTimeout(() => {
-                setShowModal(show);
-            }, 0)
+    const onOutsideClick = (event: MouseEvent) => {
+        if (event.target === event.currentTarget) {
+            setChatList([])
+            setValue('')
+            onClose()
         }
-    }, [show])
+    }
 
     if (!show) {
         return null
     }
 
     return (
-        <div className="fixed inset-0 px-6 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999]">
-            <div className="bg-white rounded-xl p-6 w-full max-w-4xl shadow-xl transition-transform" style={{ transformOrigin: 'center', transform: showModal ? 'scale(1)' : 'scale(0.9)' }}>
+        <div onClick={onOutsideClick as any} className="fixed inset-0 px-6 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999]">
+            <div className="bg-white rounded-xl p-6 w-full max-w-4xl shadow-xl">
                 <ul className={`w-full ${chatList.length === 0 ? '' : 'mb-6'}`}>
                     {chatList.map((chat, index) => (
                         <li key={index} className={`font-sans mb-5 p-4 w-full rounded-lg last:mb-0 text-slate-500 max-w-[75%] ${chat.by === 'user' ? 'ml-auto bg-gray-200' : 'bg-blue-100'}`}>

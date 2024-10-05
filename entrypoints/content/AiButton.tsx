@@ -14,7 +14,6 @@ const AiButton = ({ inputRef }: AiButtonProps) => {
     const [showModal, setShowModal] = useState(false)
 
     const onInsertButtonClick = (value: string) => {
-        setShowModal(false)
         inputRef.innerHTML = `<p>${value}</p>`
 
         // hide placeholder
@@ -52,7 +51,7 @@ const AiButton = ({ inputRef }: AiButtonProps) => {
             ), inputRef.parentElement!)}
 
             {/* Show Modal */}
-            <Modal onInsert={onInsertButtonClick} show={showModal} />
+            <Modal onClose={() => setShowModal(false)} onInsert={onInsertButtonClick} show={showModal} />
         </>
     )
 }
