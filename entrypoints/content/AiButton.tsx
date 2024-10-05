@@ -14,6 +14,7 @@ const AiButton = ({ inputRef }: AiButtonProps) => {
     const [showModal, setShowModal] = useState(false)
 
     const onInsertButtonClick = (value: string) => {
+        setShowModal(false)
         inputRef.innerHTML = `<p>${value}</p>`
 
         // hide placeholder
