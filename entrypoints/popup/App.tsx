@@ -13,17 +13,6 @@ const App = () => {
             <p className="mt-4 text-gray-600 text-center text-lg">
                 Enhance your LinkedIn messaging experience with AI-powered replies.
             </p>
-            <img
-                src={Logo}
-                alt="LinkedIn AI Reply"
-                className="mt-6 mb-4 w-40 h-40"
-            />
-            <button onClick={onGetStarted} className="px-5 py-2.5 mt-4 text-white bg-gradient-to-t from-teal-500 to-blue-500 rounded hover:opacity-85 active:scale-95">
-                Get Started
-            </button>
-            <footer className="mt-6 text-sm text-gray-500 mb-12 text-center">
-                &copy; 2024 LinkedIn AI Reply Extension. All rights reserved.
-            </footer>
         </div>
     );
 }
