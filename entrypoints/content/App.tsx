@@ -8,9 +8,7 @@ const App = () => {
     useEffect(() => {
         const checkForMessageInputs = () => {
             const messageInputs = Array.from(document.querySelectorAll<HTMLDivElement>(inputClass))
-            if (messageInputs.length !== inputRefs.length) {
-                setInputRefs(messageInputs)
-            }
+            setInputRefs(messageInputs)
         }
 
         // Check for message inputs every 1.5 seconds
