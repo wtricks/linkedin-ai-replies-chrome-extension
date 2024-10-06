@@ -4,7 +4,7 @@ import App from "./App";
 
 export default defineContentScript({
     matches: ["https://*.linkedin.com/*"],
-    cssInjectionMode: "ui",
+    // cssInjectionMode: "manifest",
 
     main(ctx) {
         createIntegratedUi(ctx, {
