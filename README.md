@@ -2,6 +2,10 @@
 
 This Chrome extension injects an AI button into message input boxes on LinkedIn. The AI button allows users to generate AI-powered responses, insert them into message inputs, and manage modals for generating and inserting dynamic text.
 
+# Demo
+
+https://github.com/user-attachments/assets/3469a45b-9f69-4146-b022-d1a9059ef5d4
+
 ## Features
 
 - **AI Button Injection:** Automatically adds an AI button to each LinkedIn message input.
